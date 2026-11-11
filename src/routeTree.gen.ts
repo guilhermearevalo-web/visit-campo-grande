@@ -10,33 +10,218 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedEscanearRouteImport } from './routes/_authenticated/escanear'
+import { Route as AuthenticatedParceiroRouteImport } from './routes/_authenticated/parceiro'
+import { Route as AuthenticatedPassaporteRouteImport } from './routes/_authenticated/passaporte'
+import { Route as AuthenticatedVouchersRouteImport } from './routes/_authenticated/vouchers'
+import { Route as AtrativosIndexRouteImport } from './routes/atrativos/index'
+import { Route as AtrativosSlugRouteImport } from './routes/atrativos/$slug'
+import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminAtrativosRouteImport } from './routes/_authenticated/admin.atrativos'
+import { Route as AuthenticatedAdminParceirosRouteImport } from './routes/_authenticated/admin.parceiros'
+import { Route as AuthenticatedAdminRecompensasRouteImport } from './routes/_authenticated/admin.recompensas'
+import { Route as AuthenticatedPlacaIdRouteImport } from './routes/_authenticated/placa.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEscanearRoute = AuthenticatedEscanearRouteImport.update({
+  id: '/escanear',
+  path: '/escanear',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedParceiroRoute = AuthenticatedParceiroRouteImport.update({
+  id: '/parceiro',
+  path: '/parceiro',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPassaporteRoute = AuthenticatedPassaporteRouteImport.update({
+  id: '/passaporte',
+  path: '/passaporte',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedVouchersRoute = AuthenticatedVouchersRouteImport.update({
+  id: '/vouchers',
+  path: '/vouchers',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AtrativosIndexRoute = AtrativosIndexRouteImport.update({
+  id: '/atrativos/',
+  path: '/atrativos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtrativosSlugRoute = AtrativosSlugRouteImport.update({
+  id: '/atrativos/$slug',
+  path: '/atrativos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckinTokenRoute = CheckinTokenRouteImport.update({
+  id: '/checkin/$token',
+  path: '/checkin/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAtrativosRoute =
+  AuthenticatedAdminAtrativosRouteImport.update({
+    id: '/atrativos',
+    path: '/atrativos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminParceirosRoute =
+  AuthenticatedAdminParceirosRouteImport.update({
+    id: '/parceiros',
+    path: '/parceiros',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRecompensasRoute =
+  AuthenticatedAdminRecompensasRouteImport.update({
+    id: '/recompensas',
+    path: '/recompensas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedPlacaIdRoute = AuthenticatedPlacaIdRouteImport.update({
+  id: '/placa/$id',
+  path: '/placa/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/escanear': typeof AuthenticatedEscanearRoute
+  '/parceiro': typeof AuthenticatedParceiroRoute
+  '/passaporte': typeof AuthenticatedPassaporteRoute
+  '/vouchers': typeof AuthenticatedVouchersRoute
+  '/atrativos/$slug': typeof AtrativosSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
+  '/atrativos/': typeof AtrativosIndexRoute
+  '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
+  '/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
+  '/placa/$id': typeof AuthenticatedPlacaIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/escanear': typeof AuthenticatedEscanearRoute
+  '/parceiro': typeof AuthenticatedParceiroRoute
+  '/passaporte': typeof AuthenticatedPassaporteRoute
+  '/vouchers': typeof AuthenticatedVouchersRoute
+  '/atrativos/$slug': typeof AtrativosSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
+  '/atrativos': typeof AtrativosIndexRoute
+  '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
+  '/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
+  '/placa/$id': typeof AuthenticatedPlacaIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/escanear': typeof AuthenticatedEscanearRoute
+  '/_authenticated/parceiro': typeof AuthenticatedParceiroRoute
+  '/_authenticated/passaporte': typeof AuthenticatedPassaporteRoute
+  '/_authenticated/vouchers': typeof AuthenticatedVouchersRoute
+  '/atrativos/$slug': typeof AtrativosSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
+  '/atrativos/': typeof AtrativosIndexRoute
+  '/_authenticated/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/_authenticated/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
+  '/_authenticated/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
+  '/_authenticated/placa/$id': typeof AuthenticatedPlacaIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/admin'
+    | '/escanear'
+    | '/parceiro'
+    | '/passaporte'
+    | '/vouchers'
+    | '/atrativos/$slug'
+    | '/checkin/$token'
+    | '/atrativos/'
+    | '/admin/atrativos'
+    | '/admin/parceiros'
+    | '/admin/recompensas'
+    | '/placa/$id'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/escanear'
+    | '/parceiro'
+    | '/passaporte'
+    | '/vouchers'
+    | '/atrativos/$slug'
+    | '/checkin/$token'
+    | '/atrativos'
+    | '/admin/atrativos'
+    | '/admin/parceiros'
+    | '/admin/recompensas'
+    | '/placa/$id'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/admin'
+    | '/_authenticated/escanear'
+    | '/_authenticated/parceiro'
+    | '/_authenticated/passaporte'
+    | '/_authenticated/vouchers'
+    | '/atrativos/$slug'
+    | '/checkin/$token'
+    | '/atrativos/'
+    | '/_authenticated/admin/atrativos'
+    | '/_authenticated/admin/parceiros'
+    | '/_authenticated/admin/recompensas'
+    | '/_authenticated/placa/$id'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  AtrativosSlugRoute: typeof AtrativosSlugRoute
+  CheckinTokenRoute: typeof CheckinTokenRoute
+  AtrativosIndexRoute: typeof AtrativosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +233,159 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/escanear': {
+      id: '/_authenticated/escanear'
+      path: '/escanear'
+      fullPath: '/escanear'
+      preLoaderRoute: typeof AuthenticatedEscanearRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/parceiro': {
+      id: '/_authenticated/parceiro'
+      path: '/parceiro'
+      fullPath: '/parceiro'
+      preLoaderRoute: typeof AuthenticatedParceiroRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/passaporte': {
+      id: '/_authenticated/passaporte'
+      path: '/passaporte'
+      fullPath: '/passaporte'
+      preLoaderRoute: typeof AuthenticatedPassaporteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vouchers': {
+      id: '/_authenticated/vouchers'
+      path: '/vouchers'
+      fullPath: '/vouchers'
+      preLoaderRoute: typeof AuthenticatedVouchersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/atrativos/': {
+      id: '/atrativos/'
+      path: '/atrativos'
+      fullPath: '/atrativos/'
+      preLoaderRoute: typeof AtrativosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atrativos/$slug': {
+      id: '/atrativos/$slug'
+      path: '/atrativos/$slug'
+      fullPath: '/atrativos/$slug'
+      preLoaderRoute: typeof AtrativosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkin/$token': {
+      id: '/checkin/$token'
+      path: '/checkin/$token'
+      fullPath: '/checkin/$token'
+      preLoaderRoute: typeof CheckinTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/atrativos': {
+      id: '/_authenticated/admin/atrativos'
+      path: '/atrativos'
+      fullPath: '/admin/atrativos'
+      preLoaderRoute: typeof AuthenticatedAdminAtrativosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/parceiros': {
+      id: '/_authenticated/admin/parceiros'
+      path: '/parceiros'
+      fullPath: '/admin/parceiros'
+      preLoaderRoute: typeof AuthenticatedAdminParceirosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/recompensas': {
+      id: '/_authenticated/admin/recompensas'
+      path: '/recompensas'
+      fullPath: '/admin/recompensas'
+      preLoaderRoute: typeof AuthenticatedAdminRecompensasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/placa/$id': {
+      id: '/_authenticated/placa/$id'
+      path: '/placa/$id'
+      fullPath: '/placa/$id'
+      preLoaderRoute: typeof AuthenticatedPlacaIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAtrativosRoute: typeof AuthenticatedAdminAtrativosRoute
+  AuthenticatedAdminParceirosRoute: typeof AuthenticatedAdminParceirosRoute
+  AuthenticatedAdminRecompensasRoute: typeof AuthenticatedAdminRecompensasRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAtrativosRoute: AuthenticatedAdminAtrativosRoute,
+  AuthenticatedAdminParceirosRoute: AuthenticatedAdminParceirosRoute,
+  AuthenticatedAdminRecompensasRoute: AuthenticatedAdminRecompensasRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedEscanearRoute: typeof AuthenticatedEscanearRoute
+  AuthenticatedParceiroRoute: typeof AuthenticatedParceiroRoute
+  AuthenticatedPassaporteRoute: typeof AuthenticatedPassaporteRoute
+  AuthenticatedVouchersRoute: typeof AuthenticatedVouchersRoute
+  AuthenticatedPlacaIdRoute: typeof AuthenticatedPlacaIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedEscanearRoute: AuthenticatedEscanearRoute,
+  AuthenticatedParceiroRoute: AuthenticatedParceiroRoute,
+  AuthenticatedPassaporteRoute: AuthenticatedPassaporteRoute,
+  AuthenticatedVouchersRoute: AuthenticatedVouchersRoute,
+  AuthenticatedPlacaIdRoute: AuthenticatedPlacaIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  AtrativosSlugRoute: AtrativosSlugRoute,
+  CheckinTokenRoute: CheckinTokenRoute,
+  AtrativosIndexRoute: AtrativosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
