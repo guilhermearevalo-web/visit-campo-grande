@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Check-ins, voucher issuance/redemption and retroactive delivery run only through SECURITY DEFINER RPCs; clients never insert into passport_checkins/user_vouchers (prevents tampering).
+- attractions.partner_code and qr_code_token are column-revoked from clients; select with ATTR_COLS and read secrets via admin_attraction_secrets() (staff only).
+- Roles live in user_roles (has_role/is_staff); the first account to sign up becomes admin via the signup trigger.
