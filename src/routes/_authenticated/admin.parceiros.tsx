@@ -39,10 +39,10 @@ function AdminPartners() {
   async function savePartner() {
     const { data: d } = await supabase.from("destinations").select("id").eq("slug", DESTINATION_SLUG).single();
     const owner = f.owner_email ? byEmail(f.owner_email) : undefined;
-    if (f.owner_email && !owner) return toast.error("Nenhuma conta com esse e-mail. Peça para o responsável criar uma conta primeiro.");
+    if (f.owner_email && !owner) { toast.error("Nenhuma conta com esse e-mail. Peça para o responsável criar uma conta primeiro."); return; }
     const { owner_email: _o, ...rest } = f;
     const { error } = await supabase.from("commercial_partners").insert({ ...rest, destination_id: d!.id, owner_id: owner?.id ?? null, status: "active" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (owner) await supabase.from("user_roles").insert({ user_id: owner.id, role: "partner" });
     setOpen(false); refresh(); toast.success("Parceiro cadastrado");
   }
@@ -51,9 +51,9 @@ function AdminPartners() {
   }
   async function grant() {
     const p = byEmail(roleEmail);
-    if (!p) return toast.error("Nenhuma conta com esse e-mail.");
+    if (!p) { toast.error("Nenhuma conta com esse e-mail."); return; }
     const { error } = await supabase.from("user_roles").insert({ user_id: p.id, role });
-    if (error) return toast.error(error.code === "23505" ? "Essa pessoa já tem esse papel." : error.message);
+    if (error) { toast.error(error.code === "23505" ? "Essa pessoa já tem esse papel." : error.message); return; }
     setRoleEmail(""); refresh(); toast.success("Acesso liberado");
   }
   async function revoke(id: string) { await supabase.from("user_roles").delete().eq("id", id); refresh(); }

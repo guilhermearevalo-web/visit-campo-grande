@@ -15,8 +15,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/admin/atrativos")({ component: AdminAttractions });
 
-type Form = Record<string, string | number | boolean>;
-const EMPTY: Form = { name: "", slug: "", category: "parque", description: "", history: "", address: "", latitude: -20.4628, longitude: -54.6141, geofence_radius_meters: 150, validation_mode: "both", partner_code: "", opening_hours: "", contact_phone: "", instagram: "", website: "", cover_image_url: "", order_sequence: 10, points_reward: 10 };
+const EMPTY = { name: "", slug: "", category: "parque", description: "", history: "", address: "", latitude: -20.4628, longitude: -54.6141, geofence_radius_meters: 150, validation_mode: "both", partner_code: "", opening_hours: "", contact_phone: "", instagram: "", website: "", cover_image_url: "", order_sequence: 10, points_reward: 10 };
+type Form = { [K in keyof typeof EMPTY]: (typeof EMPTY)[K] extends number ? number | string : string };
 const slugify = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 function AdminAttractions() {
@@ -53,13 +53,13 @@ function AdminAttractions() {
       const { data: dest } = await supabase.from("destinations").select("id").eq("slug", DESTINATION_SLUG).single();
       ({ error } = await supabase.from("attractions").insert({ ...(payload as object), destination_id: dest!.id } as never));
     }
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Atrativo salvo");
     setEdit(null); refresh();
   }
 
-  const set = (k: string, v: string | number) => setEdit((e) => e && { ...e, f: { ...e.f, [k]: v } });
-  const field = (k: string, label: string, type = "text") => (
+  const set = (k: keyof Form, v: string | number) => setEdit((e) => e && { ...e, f: { ...e.f, [k]: v } });
+  const field = (k: keyof Form, label: string, type = "text") => (
     <div><Label>{label}</Label><Input type={type} step="any" value={String(edit?.f[k] ?? "")} onChange={(e) => set(k, e.target.value)} /></div>
   );
 
@@ -86,7 +86,7 @@ function AdminAttractions() {
                   <td className="p-3 font-mono">{a.partner_code}</td>
                   <td className="p-3"><Switch checked={a.is_passport_active} onCheckedChange={(v) => toggle(a.id, v)} /></td>
                   <td className="flex gap-1 p-3">
-                    <Button size="icon" variant="ghost" aria-label="Editar" onClick={() => { const { qr_code_token: _q, id: _i, destination_id: _d, created_at: _c, gallery_urls: _g, ...rest } = a; setEdit({ id: a.id, f: Object.fromEntries(Object.entries(rest).map(([k, v]) => [k, v ?? ""])) as Form }); }}><Pencil className="h-4 w-4" /></Button>
+                    <Button size="icon" variant="ghost" aria-label="Editar" onClick={() => { const rest = a; setEdit({ id: a.id, f: { ...EMPTY, ...(Object.fromEntries(Object.entries(rest).filter(([k]) => k in EMPTY).map(([k, v]) => [k, v ?? ""])) as Partial<Form>) } }); }}><Pencil className="h-4 w-4" /></Button>
                     <Button size="icon" variant="ghost" asChild aria-label="Placa QR"><Link to="/placa/$id" params={{ id: a.id }} target="_blank"><Printer className="h-4 w-4" /></Link></Button>
                   </td>
                 </tr>

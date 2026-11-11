@@ -32,12 +32,12 @@ function QrCheckin() {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) {
         const { data: slug } = await supabase.rpc("attraction_by_qr", { _token: token });
-        if (!slug) return setState("invalid");
+        if (!slug) { setState("invalid"); return; }
         sessionStorage.setItem("post-auth", `/checkin/${token}`);
         return navigate({ to: "/atrativos/$slug", params: { slug } });
       }
       const { data, error } = await supabase.rpc("checkin_qr", { _token: token });
-      if (error) return setState("invalid");
+      if (error) { setState("invalid"); return; }
       const r = data as typeof res;
       setRes(r);
       setState("done");

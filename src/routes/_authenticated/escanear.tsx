@@ -26,7 +26,7 @@ function Scan() {
         <QrScanner
           onResult={(text) => {
             const m = text.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
-            if (!m) return toast.error("Este QR Code não é de um atrativo do passaporte.");
+            if (!m) { toast.error("Este QR Code não é de um atrativo do passaporte."); return; }
             navigate({ to: "/checkin/$token", params: { token: m[0] } });
           }}
         />

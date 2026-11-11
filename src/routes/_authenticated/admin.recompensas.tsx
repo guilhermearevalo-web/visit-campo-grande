@@ -45,12 +45,12 @@ function AdminRewards() {
       const { data: d } = await supabase.from("destinations").select("id").eq("slug", DESTINATION_SLUG).single();
       ({ error } = await supabase.from("rewards").insert({ ...(payload as object), destination_id: d!.id } as never));
     }
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setEdit(null); refresh(); toast.success("Recompensa salva");
   }
   async function deliver(id: string) {
     const { data: n, error } = await supabase.rpc("deliver_reward_retroactive", { _reward_id: id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(n ? `${n} voucher(s) entregue(s)` : "Nenhum novo turista elegível");
     refresh();
   }

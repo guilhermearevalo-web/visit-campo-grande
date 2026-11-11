@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 
 type Result = { ok: boolean; already?: boolean; attraction?: string; new_vouchers?: number; distance?: number; radius?: number; invalid_code?: boolean };
 
-export function StampDialog({ name, open, onOpenChange, vouchers }: { name: string; open: boolean; onOpenChange: (o: boolean) => void; vouchers?: number }) {
+export function StampDialog({ name, open, onOpenChange, vouchers }: { name: string; open: boolean; onOpenChange: (o: boolean) => void; vouchers?: number | undefined }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm text-center">
@@ -49,13 +49,13 @@ export function CheckinPanel({ attraction, loggedIn, done }: { attraction: { id:
   }
 
   function gps() {
-    if (!navigator.geolocation) return toast.error("GPS indisponível neste dispositivo.");
+    if (!navigator.geolocation) { toast.error("GPS indisponível neste dispositivo."); return; }
     setBusy("gps");
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { data, error } = await supabase.rpc("checkin_geofence", { _attraction_id: attraction.id, _lat: pos.coords.latitude, _lng: pos.coords.longitude });
         setBusy(null);
-        if (error) return toast.error(error.message);
+        if (error) { toast.error(error.message); return; }
         handle(data as Result);
       },
       () => {
@@ -70,7 +70,7 @@ export function CheckinPanel({ attraction, loggedIn, done }: { attraction: { id:
     setBusy("code");
     const { data, error } = await supabase.rpc("checkin_code", { _attraction_id: attraction.id, _code: code });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     handle(data as Result);
   }
 

@@ -109,7 +109,7 @@ function Dashboard() {
             <li key={r.name} className="flex items-center gap-3 text-sm">
               <span className="w-6 font-extrabold text-primary">{i + 1}º</span>
               <span className="flex-1">{r.name}</span>
-              <div className="h-2 w-32 overflow-hidden rounded-full bg-muted"><div className="h-full bg-primary" style={{ width: `${ranking[0].v ? (r.v / ranking[0].v) * 100 : 0}%` }} /></div>
+              <div className="h-2 w-32 overflow-hidden rounded-full bg-muted"><div className="h-full bg-primary" style={{ width: `${ranking[0]?.v ? (r.v / ranking[0].v) * 100 : 0}%` }} /></div>
               <b className="w-8 text-right">{r.v}</b>
             </li>
           ))}
