@@ -10,33 +10,145 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedEscanearRouteImport } from './routes/_authenticated/escanear'
+import { Route as AuthenticatedParceiroRouteImport } from './routes/_authenticated/parceiro'
+import { Route as AuthenticatedPassaporteRouteImport } from './routes/_authenticated/passaporte'
+import { Route as AuthenticatedVouchersRouteImport } from './routes/_authenticated/vouchers'
+import { Route as AtrativosIndexRouteImport } from './routes/atrativos/index'
+import { Route as AtrativosSlugRouteImport } from './routes/atrativos/$slug'
+import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEscanearRoute = AuthenticatedEscanearRouteImport.update({
+  id: '/escanear',
+  path: '/escanear',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedParceiroRoute = AuthenticatedParceiroRouteImport.update({
+  id: '/parceiro',
+  path: '/parceiro',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPassaporteRoute = AuthenticatedPassaporteRouteImport.update({
+  id: '/passaporte',
+  path: '/passaporte',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedVouchersRoute = AuthenticatedVouchersRouteImport.update({
+  id: '/vouchers',
+  path: '/vouchers',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AtrativosIndexRoute = AtrativosIndexRouteImport.update({
+  id: '/atrativos/',
+  path: '/atrativos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtrativosSlugRoute = AtrativosSlugRouteImport.update({
+  id: '/atrativos/$slug',
+  path: '/atrativos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckinTokenRoute = CheckinTokenRouteImport.update({
+  id: '/checkin/$token',
+  path: '/checkin/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/escanear': typeof AuthenticatedEscanearRoute
+  '/parceiro': typeof AuthenticatedParceiroRoute
+  '/passaporte': typeof AuthenticatedPassaporteRoute
+  '/vouchers': typeof AuthenticatedVouchersRoute
+  '/atrativos/$slug': typeof AtrativosSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
+  '/atrativos/': typeof AtrativosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/escanear': typeof AuthenticatedEscanearRoute
+  '/parceiro': typeof AuthenticatedParceiroRoute
+  '/passaporte': typeof AuthenticatedPassaporteRoute
+  '/vouchers': typeof AuthenticatedVouchersRoute
+  '/atrativos/$slug': typeof AtrativosSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
+  '/atrativos': typeof AtrativosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/escanear': typeof AuthenticatedEscanearRoute
+  '/_authenticated/parceiro': typeof AuthenticatedParceiroRoute
+  '/_authenticated/passaporte': typeof AuthenticatedPassaporteRoute
+  '/_authenticated/vouchers': typeof AuthenticatedVouchersRoute
+  '/atrativos/$slug': typeof AtrativosSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
+  '/atrativos/': typeof AtrativosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/escanear'
+    | '/parceiro'
+    | '/passaporte'
+    | '/vouchers'
+    | '/atrativos/$slug'
+    | '/checkin/$token'
+    | '/atrativos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/escanear'
+    | '/parceiro'
+    | '/passaporte'
+    | '/vouchers'
+    | '/atrativos/$slug'
+    | '/checkin/$token'
+    | '/atrativos'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/escanear'
+    | '/_authenticated/parceiro'
+    | '/_authenticated/passaporte'
+    | '/_authenticated/vouchers'
+    | '/atrativos/$slug'
+    | '/checkin/$token'
+    | '/atrativos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  AtrativosSlugRoute: typeof AtrativosSlugRoute
+  CheckinTokenRoute: typeof CheckinTokenRoute
+  AtrativosIndexRoute: typeof AtrativosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +160,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/escanear': {
+      id: '/_authenticated/escanear'
+      path: '/escanear'
+      fullPath: '/escanear'
+      preLoaderRoute: typeof AuthenticatedEscanearRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/parceiro': {
+      id: '/_authenticated/parceiro'
+      path: '/parceiro'
+      fullPath: '/parceiro'
+      preLoaderRoute: typeof AuthenticatedParceiroRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/passaporte': {
+      id: '/_authenticated/passaporte'
+      path: '/passaporte'
+      fullPath: '/passaporte'
+      preLoaderRoute: typeof AuthenticatedPassaporteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vouchers': {
+      id: '/_authenticated/vouchers'
+      path: '/vouchers'
+      fullPath: '/vouchers'
+      preLoaderRoute: typeof AuthenticatedVouchersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/atrativos/': {
+      id: '/atrativos/'
+      path: '/atrativos'
+      fullPath: '/atrativos/'
+      preLoaderRoute: typeof AtrativosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atrativos/$slug': {
+      id: '/atrativos/$slug'
+      path: '/atrativos/$slug'
+      fullPath: '/atrativos/$slug'
+      preLoaderRoute: typeof AtrativosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkin/$token': {
+      id: '/checkin/$token'
+      path: '/checkin/$token'
+      fullPath: '/checkin/$token'
+      preLoaderRoute: typeof CheckinTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEscanearRoute: typeof AuthenticatedEscanearRoute
+  AuthenticatedParceiroRoute: typeof AuthenticatedParceiroRoute
+  AuthenticatedPassaporteRoute: typeof AuthenticatedPassaporteRoute
+  AuthenticatedVouchersRoute: typeof AuthenticatedVouchersRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEscanearRoute: AuthenticatedEscanearRoute,
+  AuthenticatedParceiroRoute: AuthenticatedParceiroRoute,
+  AuthenticatedPassaporteRoute: AuthenticatedPassaporteRoute,
+  AuthenticatedVouchersRoute: AuthenticatedVouchersRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  AtrativosSlugRoute: AtrativosSlugRoute,
+  CheckinTokenRoute: CheckinTokenRoute,
+  AtrativosIndexRoute: AtrativosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
