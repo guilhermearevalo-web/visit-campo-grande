@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedEscanearRouteImport } from './routes/_authenticated/escanear'
 import { Route as AuthenticatedParceiroRouteImport } from './routes/_authenticated/parceiro'
 import { Route as AuthenticatedPassaporteRouteImport } from './routes/_authenticated/passaporte'
@@ -19,6 +20,7 @@ import { Route as AuthenticatedVouchersRouteImport } from './routes/_authenticat
 import { Route as AtrativosIndexRouteImport } from './routes/atrativos/index'
 import { Route as AtrativosSlugRouteImport } from './routes/atrativos/$slug'
 import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedEscanearRoute = AuthenticatedEscanearRouteImport.update({
   id: '/escanear',
@@ -69,10 +76,16 @@ const CheckinTokenRoute = CheckinTokenRouteImport.update({
   path: '/checkin/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/escanear': typeof AuthenticatedEscanearRoute
   '/parceiro': typeof AuthenticatedParceiroRoute
   '/passaporte': typeof AuthenticatedPassaporteRoute
@@ -80,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/atrativos/$slug': typeof AtrativosSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos/': typeof AtrativosIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,12 +105,14 @@ export interface FileRoutesByTo {
   '/atrativos/$slug': typeof AtrativosSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos': typeof AtrativosIndexRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/escanear': typeof AuthenticatedEscanearRoute
   '/_authenticated/parceiro': typeof AuthenticatedParceiroRoute
   '/_authenticated/passaporte': typeof AuthenticatedPassaporteRoute
@@ -104,12 +120,14 @@ export interface FileRoutesById {
   '/atrativos/$slug': typeof AtrativosSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos/': typeof AtrativosIndexRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/admin'
     | '/escanear'
     | '/parceiro'
     | '/passaporte'
@@ -117,6 +135,7 @@ export interface FileRouteTypes {
     | '/atrativos/$slug'
     | '/checkin/$token'
     | '/atrativos/'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,11 +147,13 @@ export interface FileRouteTypes {
     | '/atrativos/$slug'
     | '/checkin/$token'
     | '/atrativos'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/admin'
     | '/_authenticated/escanear'
     | '/_authenticated/parceiro'
     | '/_authenticated/passaporte'
@@ -140,6 +161,7 @@ export interface FileRouteTypes {
     | '/atrativos/$slug'
     | '/checkin/$token'
     | '/atrativos/'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -173,6 +195,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/escanear': {
       id: '/_authenticated/escanear'
@@ -223,10 +252,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckinTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedEscanearRoute: typeof AuthenticatedEscanearRoute
   AuthenticatedParceiroRoute: typeof AuthenticatedParceiroRoute
   AuthenticatedPassaporteRoute: typeof AuthenticatedPassaporteRoute
@@ -234,6 +282,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedEscanearRoute: AuthenticatedEscanearRoute,
   AuthenticatedParceiroRoute: AuthenticatedParceiroRoute,
   AuthenticatedPassaporteRoute: AuthenticatedPassaporteRoute,
