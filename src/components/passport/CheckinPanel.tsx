@@ -34,7 +34,7 @@ export function CheckinPanel({ attraction, loggedIn, done }: { attraction: { id:
   const qc = useQueryClient();
   const [busy, setBusy] = useState<"gps" | "code" | null>(null);
   const [code, setCode] = useState("");
-  const [stamp, setStamp] = useState<{ open: boolean; v?: number }>({ open: false });
+  const [stamp, setStamp] = useState<{ open: boolean; v?: number | undefined }>({ open: false });
 
   function handle(r: Result) {
     if (r.ok) {
