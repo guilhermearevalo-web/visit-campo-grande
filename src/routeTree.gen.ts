@@ -22,6 +22,8 @@ import { Route as AtrativosSlugRouteImport } from './routes/atrativos/$slug'
 import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminAtrativosRouteImport } from './routes/_authenticated/admin.atrativos'
+import { Route as AuthenticatedAdminParceirosRouteImport } from './routes/_authenticated/admin.parceiros'
+import { Route as AuthenticatedAdminRecompensasRouteImport } from './routes/_authenticated/admin.recompensas'
 import { Route as AuthenticatedPlacaIdRouteImport } from './routes/_authenticated/placa.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +91,18 @@ const AuthenticatedAdminAtrativosRoute =
     path: '/atrativos',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminParceirosRoute =
+  AuthenticatedAdminParceirosRouteImport.update({
+    id: '/parceiros',
+    path: '/parceiros',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRecompensasRoute =
+  AuthenticatedAdminRecompensasRouteImport.update({
+    id: '/recompensas',
+    path: '/recompensas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedPlacaIdRoute = AuthenticatedPlacaIdRouteImport.update({
   id: '/placa/$id',
   path: '/placa/$id',
@@ -107,6 +121,8 @@ export interface FileRoutesByFullPath {
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos/': typeof AtrativosIndexRoute
   '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
+  '/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
   '/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -121,6 +137,8 @@ export interface FileRoutesByTo {
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos': typeof AtrativosIndexRoute
   '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
+  '/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
   '/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -138,6 +156,8 @@ export interface FileRoutesById {
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos/': typeof AtrativosIndexRoute
   '/_authenticated/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/_authenticated/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
+  '/_authenticated/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
   '/_authenticated/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -155,6 +175,8 @@ export interface FileRouteTypes {
     | '/checkin/$token'
     | '/atrativos/'
     | '/admin/atrativos'
+    | '/admin/parceiros'
+    | '/admin/recompensas'
     | '/placa/$id'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -169,6 +191,8 @@ export interface FileRouteTypes {
     | '/checkin/$token'
     | '/atrativos'
     | '/admin/atrativos'
+    | '/admin/parceiros'
+    | '/admin/recompensas'
     | '/placa/$id'
     | '/admin'
   id:
@@ -185,6 +209,8 @@ export interface FileRouteTypes {
     | '/checkin/$token'
     | '/atrativos/'
     | '/_authenticated/admin/atrativos'
+    | '/_authenticated/admin/parceiros'
+    | '/_authenticated/admin/recompensas'
     | '/_authenticated/placa/$id'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -291,6 +317,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAtrativosRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/parceiros': {
+      id: '/_authenticated/admin/parceiros'
+      path: '/parceiros'
+      fullPath: '/admin/parceiros'
+      preLoaderRoute: typeof AuthenticatedAdminParceirosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/recompensas': {
+      id: '/_authenticated/admin/recompensas'
+      path: '/recompensas'
+      fullPath: '/admin/recompensas'
+      preLoaderRoute: typeof AuthenticatedAdminRecompensasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/placa/$id': {
       id: '/_authenticated/placa/$id'
       path: '/placa/$id'
@@ -303,11 +343,15 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAtrativosRoute: typeof AuthenticatedAdminAtrativosRoute
+  AuthenticatedAdminParceirosRoute: typeof AuthenticatedAdminParceirosRoute
+  AuthenticatedAdminRecompensasRoute: typeof AuthenticatedAdminRecompensasRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAtrativosRoute: AuthenticatedAdminAtrativosRoute,
+  AuthenticatedAdminParceirosRoute: AuthenticatedAdminParceirosRoute,
+  AuthenticatedAdminRecompensasRoute: AuthenticatedAdminRecompensasRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
