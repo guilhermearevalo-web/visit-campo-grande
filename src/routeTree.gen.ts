@@ -21,6 +21,8 @@ import { Route as AtrativosIndexRouteImport } from './routes/atrativos/index'
 import { Route as AtrativosSlugRouteImport } from './routes/atrativos/$slug'
 import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminAtrativosRouteImport } from './routes/_authenticated/admin.atrativos'
+import { Route as AuthenticatedPlacaIdRouteImport } from './routes/_authenticated/placa.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -81,6 +83,17 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminAtrativosRoute =
+  AuthenticatedAdminAtrativosRouteImport.update({
+    id: '/atrativos',
+    path: '/atrativos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedPlacaIdRoute = AuthenticatedPlacaIdRouteImport.update({
+  id: '/placa/$id',
+  path: '/placa/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -93,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/atrativos/$slug': typeof AtrativosSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos/': typeof AtrativosIndexRoute
+  '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -105,6 +120,8 @@ export interface FileRoutesByTo {
   '/atrativos/$slug': typeof AtrativosSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos': typeof AtrativosIndexRoute
+  '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -120,6 +137,8 @@ export interface FileRoutesById {
   '/atrativos/$slug': typeof AtrativosSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/atrativos/': typeof AtrativosIndexRoute
+  '/_authenticated/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
+  '/_authenticated/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -135,6 +154,8 @@ export interface FileRouteTypes {
     | '/atrativos/$slug'
     | '/checkin/$token'
     | '/atrativos/'
+    | '/admin/atrativos'
+    | '/placa/$id'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -147,6 +168,8 @@ export interface FileRouteTypes {
     | '/atrativos/$slug'
     | '/checkin/$token'
     | '/atrativos'
+    | '/admin/atrativos'
+    | '/placa/$id'
     | '/admin'
   id:
     | '__root__'
@@ -161,6 +184,8 @@ export interface FileRouteTypes {
     | '/atrativos/$slug'
     | '/checkin/$token'
     | '/atrativos/'
+    | '/_authenticated/admin/atrativos'
+    | '/_authenticated/placa/$id'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -259,14 +284,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/atrativos': {
+      id: '/_authenticated/admin/atrativos'
+      path: '/atrativos'
+      fullPath: '/admin/atrativos'
+      preLoaderRoute: typeof AuthenticatedAdminAtrativosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/placa/$id': {
+      id: '/_authenticated/placa/$id'
+      path: '/placa/$id'
+      fullPath: '/placa/$id'
+      preLoaderRoute: typeof AuthenticatedPlacaIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAtrativosRoute: typeof AuthenticatedAdminAtrativosRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAtrativosRoute: AuthenticatedAdminAtrativosRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
@@ -279,6 +320,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedParceiroRoute: typeof AuthenticatedParceiroRoute
   AuthenticatedPassaporteRoute: typeof AuthenticatedPassaporteRoute
   AuthenticatedVouchersRoute: typeof AuthenticatedVouchersRoute
+  AuthenticatedPlacaIdRoute: typeof AuthenticatedPlacaIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -287,6 +329,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedParceiroRoute: AuthenticatedParceiroRoute,
   AuthenticatedPassaporteRoute: AuthenticatedPassaporteRoute,
   AuthenticatedVouchersRoute: AuthenticatedVouchersRoute,
+  AuthenticatedPlacaIdRoute: AuthenticatedPlacaIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

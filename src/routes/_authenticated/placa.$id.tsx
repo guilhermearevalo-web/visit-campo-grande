@@ -23,9 +23,9 @@ function Plate() {
   const { data } = useQuery({
     queryKey: ["plate", id],
     queryFn: async () => {
-      const [a, s] = await Promise.all([supabase.from("attractions").select("name,category,partner_code:id").eq("id", id).single(), supabase.rpc("admin_attraction_secrets")]);
+      const [a, s] = await Promise.all([supabase.from("attractions").select("name,category").eq("id", id).single(), supabase.rpc("admin_attraction_secrets")]);
       const sec = s.data?.find((x) => x.id === id);
-      return { name: a.data?.name, category: a.data?.category, token: sec?.qr_code_token, code: sec?.partner_code };
+      return { name: a.data?.name, category: a.data?.category, token: sec?.qr_code_token };
     },
   });
   if (!data?.token) return <div className="p-10 text-center text-muted-foreground">Carregando placa…</div>;
@@ -43,7 +43,6 @@ function Plate() {
           <h1 className="mt-1 text-3xl font-extrabold">{data.name}</h1>
           <div className="mx-auto my-6 w-fit rounded-2xl border-4 border-primary bg-[#FFFFFF] p-4"><QRCodeSVG value={url} size={240} level="M" /></div>
           <p className="text-lg font-bold">Escaneie e carimbe seu passaporte!</p>
-          <p className="mt-1 text-sm text-muted-foreground">Sem sinal de GPS? Use o código: <b className="font-mono text-foreground">{data.code}</b></p>
         </div>
         <div className="bg-accent py-3 text-sm font-semibold text-accent-foreground">Campo Grande · Mato Grosso do Sul</div>
       </div>
