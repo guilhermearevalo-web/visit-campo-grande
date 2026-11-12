@@ -24,6 +24,7 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminAtrativosRouteImport } from './routes/_authenticated/admin.atrativos'
 import { Route as AuthenticatedAdminParceirosRouteImport } from './routes/_authenticated/admin.parceiros'
 import { Route as AuthenticatedAdminRecompensasRouteImport } from './routes/_authenticated/admin.recompensas'
+import { Route as AuthenticatedAdminRotasRouteImport } from './routes/_authenticated/admin.rotas'
 import { Route as AuthenticatedPlacaIdRouteImport } from './routes/_authenticated/placa.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -103,6 +104,11 @@ const AuthenticatedAdminRecompensasRoute =
     path: '/recompensas',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminRotasRoute = AuthenticatedAdminRotasRouteImport.update({
+  id: '/rotas',
+  path: '/rotas',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedPlacaIdRoute = AuthenticatedPlacaIdRouteImport.update({
   id: '/placa/$id',
   path: '/placa/$id',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
   '/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
   '/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
+  '/admin/rotas': typeof AuthenticatedAdminRotasRoute
   '/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
   '/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
   '/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
+  '/admin/rotas': typeof AuthenticatedAdminRotasRoute
   '/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/atrativos': typeof AuthenticatedAdminAtrativosRoute
   '/_authenticated/admin/parceiros': typeof AuthenticatedAdminParceirosRoute
   '/_authenticated/admin/recompensas': typeof AuthenticatedAdminRecompensasRoute
+  '/_authenticated/admin/rotas': typeof AuthenticatedAdminRotasRoute
   '/_authenticated/placa/$id': typeof AuthenticatedPlacaIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/admin/atrativos'
     | '/admin/parceiros'
     | '/admin/recompensas'
+    | '/admin/rotas'
     | '/placa/$id'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/admin/atrativos'
     | '/admin/parceiros'
     | '/admin/recompensas'
+    | '/admin/rotas'
     | '/placa/$id'
     | '/admin'
   id:
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/atrativos'
     | '/_authenticated/admin/parceiros'
     | '/_authenticated/admin/recompensas'
+    | '/_authenticated/admin/rotas'
     | '/_authenticated/placa/$id'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -331,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRecompensasRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/rotas': {
+      id: '/_authenticated/admin/rotas'
+      path: '/rotas'
+      fullPath: '/admin/rotas'
+      preLoaderRoute: typeof AuthenticatedAdminRotasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/placa/$id': {
       id: '/_authenticated/placa/$id'
       path: '/placa/$id'
@@ -345,6 +364,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAtrativosRoute: typeof AuthenticatedAdminAtrativosRoute
   AuthenticatedAdminParceirosRoute: typeof AuthenticatedAdminParceirosRoute
   AuthenticatedAdminRecompensasRoute: typeof AuthenticatedAdminRecompensasRoute
+  AuthenticatedAdminRotasRoute: typeof AuthenticatedAdminRotasRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
@@ -352,6 +372,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAtrativosRoute: AuthenticatedAdminAtrativosRoute,
   AuthenticatedAdminParceirosRoute: AuthenticatedAdminParceirosRoute,
   AuthenticatedAdminRecompensasRoute: AuthenticatedAdminRecompensasRoute,
+  AuthenticatedAdminRotasRoute: AuthenticatedAdminRotasRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
