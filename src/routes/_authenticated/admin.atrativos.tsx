@@ -1,6 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
+import { ClientOnly } from "@tanstack/react-router";
+import { ImageUpload } from "@/components/passport/ImageUpload";
+
+const LocationPicker = lazy(() => import("@/components/passport/LocationPicker"));
+const RADII = [50, 100, 150, 300, 500];
 import { Plus, Pencil, Printer, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -109,9 +114,21 @@ function AdminAttractions() {
               <select className="h-9 w-full rounded-md border bg-background px-2 text-sm" value={String(edit?.f.validation_mode)} onChange={(e) => set("validation_mode", e.target.value)}>
                 <option value="geofence">GPS</option><option value="code">Código / QR</option><option value="both">Ambos</option>
               </select></div>
+            <div className="sm:col-span-2 space-y-2">
+              <Label>Localização e área de check-in</Label>
+              <ClientOnly fallback={<div className="h-72 rounded-xl bg-muted" />}>
+                <Suspense fallback={<div className="h-72 rounded-xl bg-muted" />}>
+                  {edit && <LocationPicker lat={Number(edit.f.latitude)} lng={Number(edit.f.longitude)} radius={Number(edit.f.geofence_radius_meters)} onChange={(la, lo) => setEdit((e) => e && { ...e, f: { ...e.f, latitude: la, longitude: lo } })} />}
+                </Suspense>
+              </ClientOnly>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm">Raio:</span>
+                {RADII.map((r) => <Button key={r} type="button" size="sm" variant={Number(edit?.f.geofence_radius_meters) === r ? "default" : "outline"} onClick={() => set("geofence_radius_meters", r)}>{r}m</Button>)}
+              </div>
+            </div>
             {field("latitude", "Latitude", "number")}
             {field("longitude", "Longitude", "number")}
-            {field("geofence_radius_meters", "Raio de tolerância GPS (metros)", "number")}
+            {field("geofence_radius_meters", "Raio personalizado (metros)", "number")}
             {field("partner_code", "Código de contingência (6)")}
             {field("order_sequence", "Ordem", "number")}
             {field("points_reward", "Pontos", "number")}
@@ -120,7 +137,7 @@ function AdminAttractions() {
             {field("contact_phone", "Telefone")}
             {field("instagram", "Instagram")}
             {field("website", "Site")}
-            {field("cover_image_url", "URL da foto de capa")}
+            <div className="sm:col-span-2"><ImageUpload bucket="attractions-media" label="Foto de capa" value={String(edit?.f.cover_image_url ?? "")} onChange={(u) => set("cover_image_url", u)} /></div>
           </div>
           <div><Label>Descrição</Label><Textarea value={String(edit?.f.description ?? "")} onChange={(e) => set("description", e.target.value)} /></div>
           <div><Label>História</Label><Textarea value={String(edit?.f.history ?? "")} onChange={(e) => set("history", e.target.value)} /></div>
