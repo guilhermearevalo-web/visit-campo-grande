@@ -114,12 +114,14 @@ export type Database = {
           created_at: string
           destination_id: string
           email: string | null
+          facade_url: string | null
           id: string
           logo_url: string | null
           owner_id: string | null
           phone: string | null
           status: Database["public"]["Enums"]["partner_status"]
           trade_name: string | null
+          whatsapp: string | null
         }
         Insert: {
           address?: string | null
@@ -128,12 +130,14 @@ export type Database = {
           created_at?: string
           destination_id: string
           email?: string | null
+          facade_url?: string | null
           id?: string
           logo_url?: string | null
           owner_id?: string | null
           phone?: string | null
           status?: Database["public"]["Enums"]["partner_status"]
           trade_name?: string | null
+          whatsapp?: string | null
         }
         Update: {
           address?: string | null
@@ -142,12 +146,14 @@ export type Database = {
           created_at?: string
           destination_id?: string
           email?: string | null
+          facade_url?: string | null
           id?: string
           logo_url?: string | null
           owner_id?: string | null
           phone?: string | null
           status?: Database["public"]["Enums"]["partner_status"]
           trade_name?: string | null
+          whatsapp?: string | null
         }
         Relationships: [
           {
@@ -171,6 +177,7 @@ export type Database = {
           active: boolean
           banner_url: string | null
           created_at: string
+          home_display: string
           id: string
           logo_url: string | null
           name: string
@@ -182,6 +189,7 @@ export type Database = {
           active?: boolean
           banner_url?: string | null
           created_at?: string
+          home_display?: string
           id?: string
           logo_url?: string | null
           name: string
@@ -193,6 +201,7 @@ export type Database = {
           active?: boolean
           banner_url?: string | null
           created_at?: string
+          home_display?: string
           id?: string
           logo_url?: string | null
           name?: string
@@ -292,6 +301,7 @@ export type Database = {
           partner_id: string | null
           required_checkins_count: number
           reward_type: Database["public"]["Enums"]["reward_type"]
+          route_only: boolean
           stock_limit: number | null
           title: string
           voucher_prefix: string
@@ -306,6 +316,7 @@ export type Database = {
           partner_id?: string | null
           required_checkins_count?: number
           reward_type?: Database["public"]["Enums"]["reward_type"]
+          route_only?: boolean
           stock_limit?: number | null
           title: string
           voucher_prefix?: string
@@ -320,6 +331,7 @@ export type Database = {
           partner_id?: string | null
           required_checkins_count?: number
           reward_type?: Database["public"]["Enums"]["reward_type"]
+          route_only?: boolean
           stock_limit?: number | null
           title?: string
           voucher_prefix?: string
@@ -337,6 +349,102 @@ export type Database = {
             columns: ["partner_id"]
             isOneToOne: false
             referencedRelation: "commercial_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      route_checkpoints: {
+        Row: {
+          attraction_id: string
+          id: string
+          position: number
+          route_id: string
+        }
+        Insert: {
+          attraction_id: string
+          id?: string
+          position?: number
+          route_id: string
+        }
+        Update: {
+          attraction_id?: string
+          id?: string
+          position?: number
+          route_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_checkpoints_attraction_id_fkey"
+            columns: ["attraction_id"]
+            isOneToOne: false
+            referencedRelation: "attractions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_checkpoints_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "thematic_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      thematic_routes: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          destination_id: string
+          estimated_duration: string | null
+          id: string
+          is_active: boolean
+          mode: string
+          order_sequence: number
+          reward_id: string | null
+          slug: string
+          title: string
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          destination_id: string
+          estimated_duration?: string | null
+          id?: string
+          is_active?: boolean
+          mode?: string
+          order_sequence?: number
+          reward_id?: string | null
+          slug: string
+          title: string
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          destination_id?: string
+          estimated_duration?: string | null
+          id?: string
+          is_active?: boolean
+          mode?: string
+          order_sequence?: number
+          reward_id?: string | null
+          slug?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thematic_routes_destination_id_fkey"
+            columns: ["destination_id"]
+            isOneToOne: false
+            referencedRelation: "destinations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "thematic_routes_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards"
             referencedColumns: ["id"]
           },
         ]
@@ -429,9 +537,17 @@ export type Database = {
         }
         Returns: Json
       }
+      _grant_route_vouchers: {
+        Args: { _attraction: string; _user: string }
+        Returns: number
+      }
       _grant_vouchers: {
         Args: { _dest: string; _user: string }
         Returns: number
+      }
+      _route_completed: {
+        Args: { _route: string; _user: string }
+        Returns: boolean
       }
       admin_attraction_secrets: {
         Args: never
@@ -467,6 +583,15 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      partner_redemption_history: {
+        Args: never
+        Returns: {
+          redeemed_at: string
+          reward_title: string
+          tourist: string
+          voucher_code: string
+        }[]
+      }
       redeem_voucher: { Args: { _code: string }; Returns: Json }
     }
     Enums: {

@@ -128,3 +128,48 @@ export function downloadCsv(filename: string, rows: Record<string, unknown>[]) {
   a.click();
   URL.revokeObjectURL(url);
 }
+
+export type RouteMode = "free" | "sequential";
+
+/**
+ * Route progress. Free: any order. Sequential: a checkpoint only counts when
+ * every earlier checkpoint was visited before it.
+ */
+export function routeProgress(
+  checkpointIds: string[],
+  checkins: { attraction_id: string; created_at: string }[],
+  mode: RouteMode,
+) {
+  const at = new Map(checkins.map((c) => [c.attraction_id, new Date(c.created_at).getTime()]));
+  let done = 0;
+  if (mode === "free") done = checkpointIds.filter((id) => at.has(id)).length;
+  else {
+    let prev = -Infinity;
+    for (const id of checkpointIds) {
+      const t = at.get(id);
+      if (t == null || t < prev) break;
+      prev = t;
+      done++;
+    }
+  }
+  const total = checkpointIds.length;
+  return { done, total, pct: progressPercent(done, total), complete: total > 0 && done === total, nextId: checkpointIds[done] };
+}
+
+export function useRoutes() {
+  return useQuery({
+    queryKey: ["routes"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("thematic_routes")
+        .select("*, route_checkpoints(attraction_id,position), rewards(title)")
+        .eq("is_active", true)
+        .order("order_sequence");
+      if (error) throw error;
+      return (data ?? []).map((r) => ({
+        ...r,
+        checkpointIds: [...(r.route_checkpoints ?? [])].sort((a, b) => a.position - b.position).map((c) => c.attraction_id),
+      }));
+    },
+  });
+}
