@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { APP_NAME, useAuthUser, useRoles } from "@/lib/passport";
 import { Button } from "@/components/ui/button";
+import { GuataButton } from "./GuataButton";
 
 const NAV = [
   { to: "/", label: "Início", icon: Home },
@@ -55,6 +56,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+      <GuataButton />
       <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t bg-background/95 backdrop-blur md:hidden">
         {NAV.map((n) => (
           <Link key={n.to} to={n.to} className="flex flex-col items-center gap-0.5 py-2 text-[11px] text-muted-foreground" activeProps={{ className: "text-primary font-semibold" }} activeOptions={{ exact: n.to === "/" }}>
