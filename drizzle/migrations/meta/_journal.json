@@ -15,6 +15,13 @@
       "when": 1794487789788,
       "tag": "0001_thematic_routes_and_media",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794543408264,
+      "tag": "0002_restrict_media_read",
+      "breakpoints": true
     }
   ]
 }
