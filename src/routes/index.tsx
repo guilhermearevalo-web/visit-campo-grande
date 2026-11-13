@@ -110,7 +110,7 @@ function Home() {
           {applyQuickFilter(attractions, filter).map((a) => {
             const ok = checkins.some((c) => c.attraction_id === a.id);
             return (
-              <div key={a.id} className="rounded-2xl border bg-card p-3 shadow-sm hover:shadow-md">
+              <div key={a.id} className="min-w-0 overflow-hidden rounded-2xl border bg-card p-3 shadow-sm hover:shadow-md">
                 <Link to="/atrativos/$slug" params={{ slug: a.slug }} className="flex items-center gap-3">
                   <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-extrabold ${ok ? "bg-accent text-accent-foreground" : "bg-secondary text-primary"}`}>{ok ? "✓" : a.order_sequence}</span>
                   <div className="min-w-0">
