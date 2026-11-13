@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ScanLine, Map, Ticket, BookOpen, ArrowRight, Stamp, MessageCircle, Route as RouteIcon } from "lucide-react";
-import { QUICK_FILTERS, applyQuickFilter, guataLink, type QuickFilter } from "@/lib/navigation";
+import { ScanLine, Map, Ticket, BookOpen, ArrowRight, Stamp, Route as RouteIcon, Compass, Gift } from "lucide-react";
+import { QUICK_FILTERS, applyQuickFilter, type QuickFilter } from "@/lib/navigation";
 import { RouteButtons } from "@/components/passport/RouteButtons";
 import { AppShell } from "@/components/passport/AppShell";
 import { APP_NAME, CATEGORY_LABEL, progressPercent, useAttractions, useAuthUser, useMyCheckins } from "@/lib/passport";
@@ -87,18 +87,27 @@ function Home() {
         ))}
       </section>
 
-      <a href={guataLink()} target="_blank" rel="noreferrer" className="mt-6 flex items-center gap-4 rounded-2xl border border-accent/30 bg-accent/10 p-4 shadow-sm hover:shadow-md">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground"><MessageCircle className="h-6 w-6" /></span>
-        <div className="min-w-0 flex-1">
-          <p className="font-bold">Dúvidas sobre a cidade? Fale com o Guatá</p>
-          <p className="text-sm text-muted-foreground">Atendimento oficial de turismo de Campo Grande no WhatsApp.</p>
-        </div>
-        <ArrowRight className="h-5 w-5 text-accent" />
-      </a>
+      <section className="mt-8 rounded-3xl border bg-card p-5 shadow-sm sm:p-8">
+        <p className="text-xs font-bold uppercase tracking-widest text-primary">O que é o {APP_NAME}?</p>
+        <h2 className="mt-1 text-xl font-extrabold sm:text-2xl">Seu guia de bolso pela Cidade Morena</h2>
+        <p className="mt-2 text-sm text-muted-foreground sm:text-base">Descubra os atrativos oficiais de Campo Grande, trace a rota no Waze ou Google Maps em um toque e registre suas visitas para ganhar descontos no comércio local. Explorar é livre — não precisa de cadastro.</p>
+        <ol className="mt-5 grid gap-3 sm:grid-cols-3">
+          {[
+            { icon: Compass, t: "1. Escolha o destino", d: "Veja atrativos ideais para o seu tempo livre." },
+            { icon: Stamp, t: "2. Visite e carimbe", d: "Registre a visita pelo GPS no local ou pelo QR Code." },
+            { icon: Gift, t: "3. Ganhe recompensas", d: "Complete carimbos e resgate vouchers de desconto." },
+          ].map((s) => (
+            <li key={s.t} className="flex gap-3 rounded-2xl bg-muted/60 p-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sunset text-primary-foreground"><s.icon className="h-5 w-5" /></span>
+              <div><p className="text-sm font-bold">{s.t}</p><p className="text-xs text-muted-foreground">{s.d}</p></div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       <section className="mt-8">
         <div className="mb-3 flex items-end justify-between">
-          <h2 className="text-xl font-extrabold">O que você quer fazer agora?</h2>
+          <div><h2 className="text-xl font-extrabold">Descubra no seu tempo</h2><p className="text-sm text-muted-foreground">Escolha o estilo de passeio e veja onde ir agora.</p></div>
           <Link to="/atrativos" className="text-sm font-semibold text-primary">Ver todos</Link>
         </div>
         <div className="mb-4 flex gap-2 overflow-x-auto pb-1">

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Share2, Stamp } from "lucide-react";
+import { Lock, Share2, Stamp } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/passport/AppShell";
 import { APP_NAME, CATEGORY_LABEL, progressPercent, useAttractions, useAuthUser, useMyCheckins } from "@/lib/passport";
@@ -52,14 +52,19 @@ function Passport() {
             return (
               <Link key={a.id} to="/atrativos/$slug" params={{ slug: a.slug }} className="flex flex-col items-center text-center">
                 <div
-                  className={`flex aspect-square w-full max-w-[140px] items-center justify-center rounded-full border-[5px] border-double p-3 ${c ? "border-primary text-primary" : "border-stamp-empty text-stamp-empty"}`}
+                  className={`relative aspect-square w-full max-w-[140px] overflow-hidden rounded-full border-[5px] border-double ${c ? "border-primary" : "border-stamp-empty"}`}
                   style={c ? { transform: `rotate(${(i % 3) * 7 - 7}deg)` } : undefined}
                 >
-                  <div>
-                    <Stamp className="mx-auto h-7 w-7" />
-                    <p className="mt-1 text-[10px] font-extrabold uppercase leading-tight">{CATEGORY_LABEL[a.category]}</p>
+                  {a.cover_image_url ? (
+                    <img src={a.cover_image_url} alt={a.name} loading="lazy" className={`h-full w-full object-cover transition ${c ? "" : "opacity-40 grayscale"}`} />
+                  ) : (
+                    <div className={`flex h-full w-full items-center justify-center ${c ? "text-primary" : "text-stamp-empty"}`}><Stamp className="h-8 w-8" /></div>
+                  )}
+                  <div className={`absolute inset-x-0 bottom-0 px-1 pb-2 pt-4 text-center ${a.cover_image_url ? "bg-gradient-to-t from-foreground/80 to-transparent text-background" : ""}`}>
+                    <p className="text-[10px] font-extrabold uppercase leading-tight">{c ? "Visitado" : CATEGORY_LABEL[a.category]}</p>
                     {c && <p className="text-[10px] font-semibold">{new Date(c.created_at).toLocaleDateString("pt-BR")}</p>}
                   </div>
+                  {!c && <Lock className="absolute right-1/2 top-1/3 h-5 w-5 translate-x-1/2 text-muted-foreground" />}
                 </div>
                 <p className={`mt-2 text-xs font-semibold ${c ? "" : "text-muted-foreground"}`}>{a.name}</p>
               </Link>
