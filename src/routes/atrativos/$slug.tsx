@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Clock, MapPin, Navigation, Phone, Instagram, Globe } from "lucide-react";
+import { ArrowLeft, Clock, MapPin, Phone, Instagram, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell, EmptyState } from "@/components/passport/AppShell";
+import { RouteButtons } from "@/components/passport/RouteButtons";
 import { CheckinPanel } from "@/components/passport/CheckinPanel";
 import { APP_NAME, ATTR_COLS, CATEGORY_LABEL, useAuthUser, useMyCheckins } from "@/lib/passport";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +33,6 @@ function AttractionPage() {
   if (isLoading) return <AppShell><div className="h-64 animate-pulse rounded-2xl bg-muted" /></AppShell>;
   if (!a) return <AppShell><EmptyState icon={MapPin} title="Atrativo não encontrado" text="Este local não existe ou foi desativado." action={<Button asChild><Link to="/atrativos">Ver atrativos</Link></Button>} /></AppShell>;
 
-  const maps = `https://www.google.com/maps/dir/?api=1&destination=${a.latitude},${a.longitude}`;
   return (
     <AppShell>
       <Link to="/atrativos" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground"><ArrowLeft className="h-4 w-4" />Atrativos</Link>
@@ -57,7 +57,7 @@ function AttractionPage() {
             {a.instagram && <li className="flex gap-2"><Instagram className="h-4 w-4 text-primary" />{a.instagram}</li>}
             {a.website && <li className="flex gap-2"><Globe className="h-4 w-4 text-primary" /><a href={a.website} target="_blank" rel="noreferrer" className="underline">{a.website}</a></li>}
           </ul>
-          <Button asChild variant="outline"><a href={maps} target="_blank" rel="noreferrer"><Navigation className="h-4 w-4" />Como chegar</a></Button>
+          <div><h2 className="mb-2 font-bold">Como chegar</h2><RouteButtons lat={Number(a.latitude)} lng={Number(a.longitude)} /></div>
         </div>
         <CheckinPanel attraction={a} loggedIn={!!user} done={checkins.some((c) => c.attraction_id === a.id)} />
       </div>

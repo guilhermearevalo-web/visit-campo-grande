@@ -34,6 +34,7 @@ export function CheckinPanel({ attraction, loggedIn, done }: { attraction: { id:
   const qc = useQueryClient();
   const [busy, setBusy] = useState<"gps" | "code" | null>(null);
   const [code, setCode] = useState("");
+  const [far, setFar] = useState<{ d: number; r: number } | null>(null);
   const [stamp, setStamp] = useState<{ open: boolean; v?: number | undefined }>({ open: false });
 
   function handle(r: Result) {
@@ -45,7 +46,7 @@ export function CheckinPanel({ attraction, loggedIn, done }: { attraction: { id:
       }
       qc.invalidateQueries();
     } else if (r.invalid_code) toast.error("Código inválido. Confira com o atendente do local.");
-    else if (r.distance != null) toast.error(`Você está a ${r.distance}m. Aproxime-se (raio de ${r.radius}m).`);
+    else if (r.distance != null) { setFar({ d: Math.round(r.distance), r: r.radius ?? 0 }); toast.error(`Você está a ${Math.round(r.distance)}m do local.`); }
   }
 
   function gps() {
@@ -89,6 +90,12 @@ export function CheckinPanel({ attraction, loggedIn, done }: { attraction: { id:
   return (
     <div className="space-y-3 rounded-2xl border bg-card p-5 shadow-sm">
       <h3 className="font-bold">Registrar visita</h3>
+      {far && (
+        <div className="rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
+          <p className="font-bold">Você está a {far.d >= 1000 ? `${(far.d / 1000).toFixed(1)} km` : `${far.d} m`} do atrativo.</p>
+          <p>É preciso estar a até {far.r} m. Aproxime-se ou use o código/QR Code do local.</p>
+        </div>
+      )}
       {attraction.validation_mode !== "code" && (
         <Button onClick={gps} disabled={!!busy} className="w-full bg-sunset shadow-elegant" size="lg">
           {busy === "gps" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Navigation className="h-4 w-4" />} Validar pelo GPS
